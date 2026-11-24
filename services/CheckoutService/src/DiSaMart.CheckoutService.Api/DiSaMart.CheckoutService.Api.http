@@ -1,0 +1,6 @@
+@DiSaMart.CheckoutService.Api_HostAddress = http://localhost:5250
+
+GET {{DiSaMart.CheckoutService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

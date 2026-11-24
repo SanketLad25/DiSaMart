@@ -1,0 +1,6 @@
+@DiSaMart.AdService.Api_HostAddress = http://localhost:5218
+
+GET {{DiSaMart.AdService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

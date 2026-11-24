@@ -1,0 +1,47 @@
+<Solution>
+  <Folder Name="/services/" />
+  <Folder Name="/services/AdService/" />
+  <Folder Name="/services/AdService/src/">
+    <Project Path="services/AdService/src/DiSaMart.AdService.Api/DiSaMart.AdService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/CartService/" />
+  <Folder Name="/services/CartService/src/">
+    <Project Path="services/CartService/src/DiSaMart.CartService.Api/DiSaMart.CartService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/CheckoutService/" />
+  <Folder Name="/services/CheckoutService/src/">
+    <Project Path="services/CheckoutService/src/DiSaMart.CheckoutService.Api/DiSaMart.CheckoutService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/CurrencyService/" />
+  <Folder Name="/services/CurrencyService/src/">
+    <Project Path="services/CurrencyService/src/DiSaMart.CurrencyService.Api/DiSaMart.CurrencyService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/CustomizationService/" />
+  <Folder Name="/services/CustomizationService/src/">
+    <Project Path="services/CustomizationService/src/DiSaMart.CustomizationService.Api/DiSaMart.CustomizationService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/EmailService/" />
+  <Folder Name="/services/EmailService/src/">
+    <Project Path="services/EmailService/src/DiSaMart.EmailService.Api/DiSaMart.EmailService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/LoadGenerator/" />
+  <Folder Name="/services/LoadGenerator/src/">
+    <Project Path="services/LoadGenerator/src/DiSaMart.LoadGenerator.Api/DiSaMart.LoadGenerator.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/PaymentService/" />
+  <Folder Name="/services/PaymentService/src/">
+    <Project Path="services/PaymentService/src/DiSaMart.PaymentService.Api/DiSaMart.PaymentService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/ProductCatalogService/" />
+  <Folder Name="/services/ProductCatalogService/src/">
+    <Project Path="services/ProductCatalogService/src/DiSaMart.ProductCatalogService.Api/DiSaMart.ProductCatalogService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/RecommendationService/" />
+  <Folder Name="/services/RecommendationService/src/">
+    <Project Path="services/RecommendationService/src/DiSaMart.RecommendationService.Api/DiSaMart.RecommendationService.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/ShippingService/" />
+  <Folder Name="/services/ShippingService/src/">
+    <Project Path="services/ShippingService/src/DiSaMart.ShippingService.Api/DiSaMart.ShippingService.Api.csproj" />
+  </Folder>
+</Solution>

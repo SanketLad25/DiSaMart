@@ -1,0 +1,6 @@
+@DiSaMart.CurrencyService.Api_HostAddress = http://localhost:5011
+
+GET {{DiSaMart.CurrencyService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

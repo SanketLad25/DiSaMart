@@ -1,0 +1,6 @@
+@DiSaMart.CustomizationService.Api_HostAddress = http://localhost:5031
+
+GET {{DiSaMart.CustomizationService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

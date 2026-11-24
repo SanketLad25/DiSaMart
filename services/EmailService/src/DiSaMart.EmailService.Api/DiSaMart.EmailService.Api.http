@@ -1,0 +1,6 @@
+@DiSaMart.EmailService.Api_HostAddress = http://localhost:5105
+
+GET {{DiSaMart.EmailService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

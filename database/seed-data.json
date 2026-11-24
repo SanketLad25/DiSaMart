@@ -1,0 +1,70 @@
+{
+  "categories": [
+    {
+      "id": "A0000000-0000-0000-0000-000000000001",
+      "name": "Grocery",
+      "slug": "grocery",
+      "imageUrl": "/images/categories/grocery.svg"
+    },
+    {
+      "id": "A0000000-0000-0000-0000-000000000002",
+      "name": "Home Appliances",
+      "slug": "home-appliances",
+      "imageUrl": "/images/categories/home-appliances.svg"
+    },
+    {
+      "id": "A0000000-0000-0000-0000-000000000003",
+      "name": "Electronics & Gadgets",
+      "slug": "electronics-gadgets",
+      "imageUrl": "/images/categories/electronics-gadgets.svg"
+    },
+    {
+      "id": "A0000000-0000-0000-0000-000000000004",
+      "name": "Fashion & Clothing",
+      "slug": "fashion-clothing",
+      "imageUrl": "/images/categories/fashion-clothing.svg"
+    }
+  ],
+  "products": [
+    {"name":"Premium Basmati Rice","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Long-grain aromatic rice suitable for everyday cooking.","imageUrl":"/images/products/rice.svg","originalPrice":1499,"discountPrice":1299,"stockQuantity":120,"rating":4.7,"isFeatured":true},
+    {"name":"Whole Wheat Flour","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Stone-ground whole wheat flour for soft rotis and breads.","imageUrl":"/images/products/wheat-flour.svg","originalPrice":349,"discountPrice":299,"stockQuantity":180,"rating":4.6,"isFeatured":false},
+    {"name":"Refined Sugar","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Clean and finely granulated sugar for cooking and beverages.","imageUrl":"/images/products/sugar.svg","originalPrice":220,"discountPrice":189,"stockQuantity":200,"rating":4.4,"isFeatured":false},
+    {"name":"Sunflower Cooking Oil","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Light cooking oil packed in a convenient 5 litre container.","imageUrl":"/images/products/cooking-oil.svg","originalPrice":899,"discountPrice":799,"stockQuantity":90,"rating":4.5,"isFeatured":true},
+    {"name":"Darjeeling Tea Powder","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Full-bodied tea powder with a smooth aromatic finish.","imageUrl":"/images/products/tea.svg","originalPrice":399,"discountPrice":349,"stockQuantity":140,"rating":4.8,"isFeatured":true},
+    {"name":"Premium Coffee Powder","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Dark roasted coffee powder with a rich balanced flavour.","imageUrl":"/images/products/coffee.svg","originalPrice":699,"discountPrice":599,"stockQuantity":100,"rating":4.7,"isFeatured":false},
+    {"name":"Fresh Milk","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Pasteurized full cream milk in a one litre pack.","imageUrl":"/images/products/milk.svg","originalPrice":72,"discountPrice":68,"stockQuantity":300,"rating":4.3,"isFeatured":false},
+    {"name":"Multigrain Biscuits","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Crispy fibre-rich biscuits with a wholesome taste.","imageUrl":"/images/products/biscuits.svg","originalPrice":180,"discountPrice":149,"stockQuantity":160,"rating":4.5,"isFeatured":false},
+    {"name":"Mixed Dry Fruits","categoryId":"A0000000-0000-0000-0000-000000000001","description":"A premium mix of almonds, cashews, raisins, and pistachios.","imageUrl":"/images/products/dry-fruits.svg","originalPrice":1199,"discountPrice":999,"stockQuantity":75,"rating":4.8,"isFeatured":true},
+    {"name":"Masala Spice Box","categoryId":"A0000000-0000-0000-0000-000000000001","description":"Assorted everyday spices for classic Indian cooking.","imageUrl":"/images/products/spices.svg","originalPrice":499,"discountPrice":429,"stockQuantity":110,"rating":4.6,"isFeatured":false},
+    {"name":"Double Door Refrigerator","categoryId":"A0000000-0000-0000-0000-000000000002","description":"Energy-efficient 340 litre refrigerator with frost-free cooling.","imageUrl":"/images/products/refrigerator.svg","originalPrice":38999,"discountPrice":34999,"stockQuantity":22,"rating":4.7,"isFeatured":true},
+    {"name":"Front Load Washing Machine","categoryId":"A0000000-0000-0000-0000-000000000002","description":"8 kg washing machine with inverter motor and 15 wash programs.","imageUrl":"/images/products/washing-machine.svg","originalPrice":32999,"discountPrice":28999,"stockQuantity":18,"rating":4.6,"isFeatured":true},
+    {"name":"Convection Microwave Oven","categoryId":"A0000000-0000-0000-0000-000000000002","description":"28 litre convection oven for baking, grilling, and reheating.","imageUrl":"/images/products/microwave.svg","originalPrice":14999,"discountPrice":12999,"stockQuantity":28,"rating":4.5,"isFeatured":false},
+    {"name":"Split Air Conditioner","categoryId":"A0000000-0000-0000-0000-000000000002","description":"1.5 ton inverter AC with rapid cooling and energy-saving mode.","imageUrl":"/images/products/ac.svg","originalPrice":46999,"discountPrice":39999,"stockQuantity":12,"rating":4.6,"isFeatured":true},
+    {"name":"Mixer Grinder","categoryId":"A0000000-0000-0000-0000-000000000002","description":"750 watt mixer grinder with three stainless steel jars.","imageUrl":"/images/products/mixer-grinder.svg","originalPrice":5999,"discountPrice":4499,"stockQuantity":42,"rating":4.4,"isFeatured":false},
+    {"name":"Steel Electric Kettle","categoryId":"A0000000-0000-0000-0000-000000000002","description":"1.8 litre cordless electric kettle with automatic shutoff.","imageUrl":"/images/products/kettle.svg","originalPrice":2499,"discountPrice":1999,"stockQuantity":65,"rating":4.3,"isFeatured":false},
+    {"name":"Bagless Vacuum Cleaner","categoryId":"A0000000-0000-0000-0000-000000000002","description":"Compact cyclonic vacuum cleaner with powerful suction.","imageUrl":"/images/products/vacuum-cleaner.svg","originalPrice":7999,"discountPrice":6499,"stockQuantity":35,"rating":4.5,"isFeatured":false},
+    {"name":"RO Water Purifier","categoryId":"A0000000-0000-0000-0000-000000000002","description":"Seven-stage water purifier with UV and mineral boost.","imageUrl":"/images/products/water-purifier.svg","originalPrice":17999,"discountPrice":14999,"stockQuantity":24,"rating":4.7,"isFeatured":true},
+    {"name":"BLDC Ceiling Fan","categoryId":"A0000000-0000-0000-0000-000000000002","description":"Silent energy-saving ceiling fan with remote control.","imageUrl":"/images/products/ceiling-fan.svg","originalPrice":4999,"discountPrice":3999,"stockQuantity":55,"rating":4.6,"isFeatured":false},
+    {"name":"Induction Cooktop","categoryId":"A0000000-0000-0000-0000-000000000002","description":"2000 watt induction cooktop with digital touch controls.","imageUrl":"/images/products/induction-cooktop.svg","originalPrice":4999,"discountPrice":3999,"stockQuantity":48,"rating":4.4,"isFeatured":false},
+    {"name":"5G Android Smartphone","categoryId":"A0000000-0000-0000-0000-000000000003","description":"6.7 inch AMOLED smartphone with 256 GB storage and 50 MP camera.","imageUrl":"/images/products/smartphone.svg","originalPrice":35999,"discountPrice":29999,"stockQuantity":32,"rating":4.7,"isFeatured":true},
+    {"name":"Business Laptop","categoryId":"A0000000-0000-0000-0000-000000000003","description":"14 inch laptop with 16 GB RAM, 512 GB SSD, and Windows 11.","imageUrl":"/images/products/laptop.svg","originalPrice":74999,"discountPrice":67999,"stockQuantity":16,"rating":4.6,"isFeatured":true},
+    {"name":"Smart Watch","categoryId":"A0000000-0000-0000-0000-000000000003","description":"AMOLED fitness watch with GPS, heart-rate, and sleep tracking.","imageUrl":"/images/products/smart-watch.svg","originalPrice":12999,"discountPrice":9999,"stockQuantity":52,"rating":4.5,"isFeatured":true},
+    {"name":"Wireless Bluetooth Headphones","categoryId":"A0000000-0000-0000-0000-000000000003","description":"Over-ear wireless headphones with active noise cancellation.","imageUrl":"/images/products/headphones.svg","originalPrice":8999,"discountPrice":6999,"stockQuantity":44,"rating":4.6,"isFeatured":false},
+    {"name":"True Wireless Earbuds","categoryId":"A0000000-0000-0000-0000-000000000003","description":"Compact earbuds with low-latency mode and 30-hour battery case.","imageUrl":"/images/products/earbuds.svg","originalPrice":4999,"discountPrice":3499,"stockQuantity":80,"rating":4.5,"isFeatured":true},
+    {"name":"Portable Bluetooth Speaker","categoryId":"A0000000-0000-0000-0000-000000000003","description":"Water-resistant speaker with deep bass and 24-hour playback.","imageUrl":"/images/products/speaker.svg","originalPrice":5999,"discountPrice":4499,"stockQuantity":58,"rating":4.4,"isFeatured":false},
+    {"name":"Fast Charging Power Bank","categoryId":"A0000000-0000-0000-0000-000000000003","description":"20,000 mAh power bank with USB-C and multi-device charging.","imageUrl":"/images/products/power-bank.svg","originalPrice":2999,"discountPrice":2499,"stockQuantity":95,"rating":4.5,"isFeatured":false},
+    {"name":"Mechanical Keyboard","categoryId":"A0000000-0000-0000-0000-000000000003","description":"Tenkeyless mechanical keyboard with hot-swappable switches.","imageUrl":"/images/products/keyboard.svg","originalPrice":6999,"discountPrice":5499,"stockQuantity":38,"rating":4.7,"isFeatured":false},
+    {"name":"Ergonomic Computer Mouse","categoryId":"A0000000-0000-0000-0000-000000000003","description":"Wireless ergonomic mouse with adjustable sensitivity and silent clicks.","imageUrl":"/images/products/mouse.svg","originalPrice":2999,"discountPrice":1999,"stockQuantity":70,"rating":4.4,"isFeatured":false},
+    {"name":"10-inch Android Tablet","categoryId":"A0000000-0000-0000-0000-000000000003","description":"High-resolution tablet with 8 GB RAM and 128 GB storage.","imageUrl":"/images/products/tablet.svg","originalPrice":32999,"discountPrice":27999,"stockQuantity":26,"rating":4.6,"isFeatured":true},
+    {"name":"Men's Cotton T-Shirt","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Regular-fit breathable cotton T-shirt for everyday wear.","imageUrl":"/images/products/mens-t-shirt.svg","originalPrice":999,"discountPrice":699,"stockQuantity":150,"rating":4.4,"isFeatured":false},
+    {"name":"Men's Casual Shirt","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Slim-fit casual shirt in a soft and easy-care fabric.","imageUrl":"/images/products/mens-shirt.svg","originalPrice":1799,"discountPrice":1299,"stockQuantity":125,"rating":4.5,"isFeatured":true},
+    {"name":"Men's Stretch Jeans","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Dark wash stretch jeans with a modern tapered fit.","imageUrl":"/images/products/mens-jeans.svg","originalPrice":2999,"discountPrice":2299,"stockQuantity":88,"rating":4.6,"isFeatured":false},
+    {"name":"Women's Printed Dress","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Flowing printed dress with a flattering midi silhouette.","imageUrl":"/images/products/womens-dress.svg","originalPrice":3499,"discountPrice":2499,"stockQuantity":76,"rating":4.7,"isFeatured":true},
+    {"name":"Women's Cotton Kurti","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Soft cotton kurti with subtle embroidery and side pockets.","imageUrl":"/images/products/womens-kurti.svg","originalPrice":1999,"discountPrice":1499,"stockQuantity":94,"rating":4.6,"isFeatured":false},
+    {"name":"Women's Casual Top","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Lightweight casual top with an elegant relaxed fit.","imageUrl":"/images/products/womens-top.svg","originalPrice":1499,"discountPrice":999,"stockQuantity":112,"rating":4.5,"isFeatured":false},
+    {"name":"All-Season Jacket","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Light insulated jacket with wind-resistant outer fabric.","imageUrl":"/images/products/jacket.svg","originalPrice":4499,"discountPrice":3499,"stockQuantity":64,"rating":4.6,"isFeatured":true},
+    {"name":"Sports Running Shoes","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Cushioned running shoes with breathable mesh uppers.","imageUrl":"/images/products/shoes.svg","originalPrice":4999,"discountPrice":3999,"stockQuantity":72,"rating":4.7,"isFeatured":true},
+    {"name":"Sports Wear Set","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Moisture-wicking top and shorts set for training sessions.","imageUrl":"/images/products/sports-wear.svg","originalPrice":2499,"discountPrice":1799,"stockQuantity":84,"rating":4.4,"isFeatured":false},
+    {"name":"Fashion Accessories Set","categoryId":"A0000000-0000-0000-0000-000000000004","description":"Stylish everyday accessories set for casual outfits.","imageUrl":"/images/products/accessories.svg","originalPrice":1999,"discountPrice":1299,"stockQuantity":68,"rating":4.3,"isFeatured":false}
+  ]
+}

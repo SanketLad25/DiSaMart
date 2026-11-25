@@ -1,6 +1,45 @@
 # Deployment Guide
 
-This guide defines the deployment conventions that each later implementation phase must follow.
+This guide covers the current local Docker Compose and Kubernetes deployment files.
+
+## Local Docker Compose
+
+From the repository root, copy `.env.example` to `.env`, replace the SQL Server password, then run:
+
+```powershell
+docker compose --env-file .env -f docker/docker-compose.yml up --build -d
+docker compose --env-file .env -f docker/docker-compose.yml ps
+docker compose --env-file .env -f docker/docker-compose.yml logs -f frontendservice
+```
+
+Open `http://localhost:8080`. Only the frontend is published to the host. Stop without deleting SQL data:
+
+```powershell
+docker compose --env-file .env -f docker/docker-compose.yml down
+```
+
+Database initialization is run by a one-shot container and is safe to rerun. SQL Server data is stored in the `sqlserver-data` named volume.
+
+## Kubernetes Deployment
+
+Build images using `.\scripts\build-images.ps1`, load them into the selected cluster, and replace the placeholder password in the Kubernetes Secret. The frontend image must be available as `disamart/frontend:1.0.0`; backend images use `disamart/<service>:1.0.0`; the database initializer uses `disamart/database-init:1.0.0`.
+
+Combined deployment:
+
+```powershell
+kubectl apply -f kubernetes/all-in-one.yaml
+kubectl wait --for=condition=complete job/disamart-db-init --timeout=10m -n disamart
+kubectl get pods -n disamart
+```
+
+Individual deployment:
+
+```powershell
+kubectl apply -R -f kubernetes/individual
+kubectl wait --for=condition=complete job/disamart-db-init --timeout=10m -n disamart
+```
+
+The frontend is the only externally exposed Kubernetes service (NodePort `30080`). Other APIs and SQL Server use ClusterIP.
 
 ## Service DNS Names
 
@@ -53,24 +92,9 @@ Server=sqlserver,1433;Database=<DatabaseName>;User Id=sa;Password=<Password>;Tru
 
 Passwords come from environment variables or Kubernetes Secrets.
 
-## Expected Commands
+## Operations Commands
 
 ```powershell
-# Docker Compose
-docker compose -f docker/docker-compose.yml up --build
-docker compose -f docker/docker-compose.yml ps
-docker compose -f docker/docker-compose.yml logs -f frontendservice
-docker compose -f docker/docker-compose.yml down
-
-# Individual Kubernetes manifests
-kubectl apply -f kubernetes/individual/namespace.yaml
-kubectl apply -f kubernetes/individual
-
-# Combined Kubernetes manifest
-kubectl apply -f kubernetes/all-in-one.yaml
-kubectl delete -f kubernetes/all-in-one.yaml
-
-# Kubernetes verification
 kubectl get pods -n disamart
 kubectl get services -n disamart
 kubectl get deployments -n disamart

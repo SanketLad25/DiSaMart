@@ -1,6 +1,6 @@
 # DiSaMart Database Setup
 
-The scripts in this folder define one SQL Server database per service.
+The scripts in this folder define one SQL Server database per service. Schema creation and seed scripts are safe to rerun: they do not drop existing tables.
 
 ## Files
 

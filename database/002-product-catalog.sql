@@ -1,14 +1,8 @@
 USE ProductCatalogDB;
 GO
 
-IF OBJECT_ID(N'dbo.ProductImages', N'U') IS NOT NULL
-    DROP TABLE dbo.ProductImages;
-IF OBJECT_ID(N'dbo.Products', N'U') IS NOT NULL
-    DROP TABLE dbo.Products;
-IF OBJECT_ID(N'dbo.Categories', N'U') IS NOT NULL
-    DROP TABLE dbo.Categories;
-GO
-
+IF OBJECT_ID(N'dbo.Categories', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Categories (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Categories PRIMARY KEY,
     Name NVARCHAR(100) NOT NULL,
@@ -20,8 +14,11 @@ CREATE TABLE dbo.Categories (
     CONSTRAINT UQ_Categories_Name UNIQUE (Name),
     CONSTRAINT UQ_Categories_Slug UNIQUE (Slug)
 );
+END;
 GO
 
+IF OBJECT_ID(N'dbo.Products', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Products (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Products PRIMARY KEY,
     CategoryId UNIQUEIDENTIFIER NOT NULL,
@@ -41,8 +38,11 @@ CREATE TABLE dbo.Products (
     CONSTRAINT CK_Products_Stock CHECK (StockQuantity >= 0),
     CONSTRAINT CK_Products_Rating CHECK (Rating BETWEEN 0 AND 5)
 );
+END;
 GO
 
+IF OBJECT_ID(N'dbo.ProductImages', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.ProductImages (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_ProductImages PRIMARY KEY,
     ProductId UNIQUEIDENTIFIER NOT NULL,
@@ -50,13 +50,19 @@ CREATE TABLE dbo.ProductImages (
     SortOrder INT NOT NULL CONSTRAINT DF_ProductImages_SortOrder DEFAULT(0),
     CONSTRAINT FK_ProductImages_Products FOREIGN KEY (ProductId) REFERENCES dbo.Products(Id)
 );
+END;
 GO
 
-CREATE INDEX IX_Products_CategoryId ON dbo.Products(CategoryId);
-CREATE INDEX IX_Products_IsFeatured ON dbo.Products(IsFeatured) INCLUDE (Name, DiscountPrice);
-CREATE INDEX IX_Products_IsActive ON dbo.Products(IsActive);
-CREATE INDEX IX_Products_Name ON dbo.Products(Name);
-CREATE INDEX IX_ProductImages_ProductId ON dbo.ProductImages(ProductId, SortOrder);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.Products') AND name=N'IX_Products_CategoryId')
+    CREATE INDEX IX_Products_CategoryId ON dbo.Products(CategoryId);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.Products') AND name=N'IX_Products_IsFeatured')
+    CREATE INDEX IX_Products_IsFeatured ON dbo.Products(IsFeatured) INCLUDE (Name, DiscountPrice);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.Products') AND name=N'IX_Products_IsActive')
+    CREATE INDEX IX_Products_IsActive ON dbo.Products(IsActive);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.Products') AND name=N'IX_Products_Name')
+    CREATE INDEX IX_Products_Name ON dbo.Products(Name);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.ProductImages') AND name=N'IX_ProductImages_ProductId')
+    CREATE INDEX IX_ProductImages_ProductId ON dbo.ProductImages(ProductId, SortOrder);
 GO
 
 DECLARE @Grocery UNIQUEIDENTIFIER = 'A0000000-0000-0000-0000-000000000001';

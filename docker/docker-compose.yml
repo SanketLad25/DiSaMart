@@ -1,0 +1,301 @@
+name: disamart
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:?Copy .env.example to .env and set SQLSERVER_SA_PASSWORD}
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - disamart
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -b -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    restart: unless-stopped
+
+  db-init:
+    image: disamart/database-init:1.0.0
+    build:
+      context: ..
+      dockerfile: docker/database-init.Dockerfile
+    environment:
+      DB_HOST: sqlserver
+      SQLSERVER_SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:?Copy .env.example to .env and set SQLSERVER_SA_PASSWORD}
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - disamart
+    restart: "no"
+
+  adservice:
+    image: disamart/adservice:1.0.0
+    build:
+      context: ../services/AdService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/live || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  cartservice:
+    image: disamart/cartservice:1.0.0
+    build:
+      context: ../services/CartService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__CartDb: "Server=sqlserver,1433;Database=CartDB;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/ready || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  checkoutservice:
+    image: disamart/checkoutservice:1.0.0
+    build:
+      context: ../services/CheckoutService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__CheckoutDb: "Server=sqlserver,1433;Database=CheckoutDB;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True"
+      Services__Cart: http://cartservice:8080
+      Services__Payment: http://paymentservice:8080
+      Services__Shipping: http://shippingservice:8080
+      Services__Email: http://emailservice:8080
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+      cartservice:
+        condition: service_healthy
+      paymentservice:
+        condition: service_healthy
+      shippingservice:
+        condition: service_healthy
+      emailservice:
+        condition: service_healthy
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/ready || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  currencyservice:
+    image: disamart/currencyservice:1.0.0
+    build:
+      context: ../services/CurrencyService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/live || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  emailservice:
+    image: disamart/emailservice:1.0.0
+    build:
+      context: ../services/EmailService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/live || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  customizationservice:
+    image: disamart/customizationservice:1.0.0
+    build:
+      context: ../services/CustomizationService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/live || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  loadgenerator:
+    image: disamart/loadgenerator:1.0.0
+    build:
+      context: ../services/LoadGenerator
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+      TARGET_CATALOG_URL: http://productcatalogservice:8080
+    depends_on:
+      productcatalogservice:
+        condition: service_healthy
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/live || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  paymentservice:
+    image: disamart/paymentservice:1.0.0
+    build:
+      context: ../services/PaymentService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__PaymentDb: "Server=sqlserver,1433;Database=PaymentDB;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/ready || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  productcatalogservice:
+    image: disamart/productcatalogservice:1.0.0
+    build:
+      context: ../services/ProductCatalogService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__ProductCatalogDb: "Server=sqlserver,1433;Database=ProductCatalogDB;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/ready || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  recommendationservice:
+    image: disamart/recommendationservice:1.0.0
+    build:
+      context: ../services/RecommendationService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/live || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  shippingservice:
+    image: disamart/shippingservice:1.0.0
+    build:
+      context: ../services/ShippingService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__ShippingDb: "Server=sqlserver,1433;Database=ShippingDB;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    expose: ["8080"]
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/ready || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  frontendservice:
+    image: disamart/frontend:1.0.0
+    build:
+      context: ../frontend
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      adservice:
+        condition: service_healthy
+      cartservice:
+        condition: service_healthy
+      checkoutservice:
+        condition: service_healthy
+      currencyservice:
+        condition: service_healthy
+      emailservice:
+        condition: service_healthy
+      customizationservice:
+        condition: service_healthy
+      paymentservice:
+        condition: service_healthy
+      productcatalogservice:
+        condition: service_healthy
+      recommendationservice:
+        condition: service_healthy
+      shippingservice:
+        condition: service_healthy
+    networks: [disamart]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+networks:
+  disamart:
+    driver: bridge
+
+volumes:
+  sqlserver-data:

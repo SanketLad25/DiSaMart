@@ -107,7 +107,7 @@ export async function createOrder(cartId: string, userId: string, address: Shipp
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {
-  const response = await api.get<Product[]>('/catalog/api/products/featured')
+  const response = await api.get<Product[]>('/catalog/products/featured')
   return response.data
 }
 

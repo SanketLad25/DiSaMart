@@ -1,7 +1,7 @@
 USE CartDB;
 GO
-IF OBJECT_ID(N'dbo.CartItems', N'U') IS NOT NULL DROP TABLE dbo.CartItems;
-IF OBJECT_ID(N'dbo.Carts', N'U') IS NOT NULL DROP TABLE dbo.Carts;
+IF OBJECT_ID(N'dbo.Carts', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Carts (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Carts PRIMARY KEY,
     UserId UNIQUEIDENTIFIER NOT NULL,
@@ -10,6 +10,10 @@ CREATE TABLE dbo.Carts (
     UpdatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_Carts_UpdatedAtUtc DEFAULT(SYSUTCDATETIME()),
     CONSTRAINT UQ_Carts_User UNIQUE (UserId)
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.CartItems', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.CartItems (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_CartItems PRIMARY KEY,
     CartId UNIQUEIDENTIFIER NOT NULL,
@@ -23,14 +27,15 @@ CREATE TABLE dbo.CartItems (
     CONSTRAINT CK_CartItems_UnitPrice CHECK (UnitPrice >= 0),
     CONSTRAINT UQ_CartItems_CartProduct UNIQUE (CartId, ProductId)
 );
-CREATE INDEX IX_CartItems_CartId ON dbo.CartItems(CartId);
+END;
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.CartItems') AND name=N'IX_CartItems_CartId')
+    CREATE INDEX IX_CartItems_CartId ON dbo.CartItems(CartId);
 GO
 
 USE CheckoutDB;
 GO
-IF OBJECT_ID(N'dbo.OrderStatusHistory', N'U') IS NOT NULL DROP TABLE dbo.OrderStatusHistory;
-IF OBJECT_ID(N'dbo.OrderItems', N'U') IS NOT NULL DROP TABLE dbo.OrderItems;
-IF OBJECT_ID(N'dbo.Orders', N'U') IS NOT NULL DROP TABLE dbo.Orders;
+IF OBJECT_ID(N'dbo.Orders', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Orders (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Orders PRIMARY KEY,
     UserId UNIQUEIDENTIFIER NOT NULL,
@@ -46,6 +51,10 @@ CREATE TABLE dbo.Orders (
     CreatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_Orders_CreatedAtUtc DEFAULT(SYSUTCDATETIME()),
     UpdatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_Orders_UpdatedAtUtc DEFAULT(SYSUTCDATETIME())
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.OrderItems', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.OrderItems (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_OrderItems PRIMARY KEY,
     OrderId UNIQUEIDENTIFIER NOT NULL,
@@ -57,6 +66,10 @@ CREATE TABLE dbo.OrderItems (
     CONSTRAINT FK_OrderItems_Orders FOREIGN KEY (OrderId) REFERENCES dbo.Orders(Id),
     CONSTRAINT CK_OrderItems_Quantity CHECK (Quantity > 0)
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.OrderStatusHistory', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.OrderStatusHistory (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_OrderStatusHistory PRIMARY KEY,
     OrderId UNIQUEIDENTIFIER NOT NULL,
@@ -65,14 +78,17 @@ CREATE TABLE dbo.OrderStatusHistory (
     CreatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_OrderStatusHistory_CreatedAtUtc DEFAULT(SYSUTCDATETIME()),
     CONSTRAINT FK_OrderStatusHistory_Orders FOREIGN KEY (OrderId) REFERENCES dbo.Orders(Id)
 );
-CREATE INDEX IX_Orders_UserId ON dbo.Orders(UserId, CreatedAtUtc DESC);
-CREATE INDEX IX_OrderItems_OrderId ON dbo.OrderItems(OrderId);
+END;
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.Orders') AND name=N'IX_Orders_UserId')
+    CREATE INDEX IX_Orders_UserId ON dbo.Orders(UserId, CreatedAtUtc DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.OrderItems') AND name=N'IX_OrderItems_OrderId')
+    CREATE INDEX IX_OrderItems_OrderId ON dbo.OrderItems(OrderId);
 GO
 
 USE PaymentDB;
 GO
-IF OBJECT_ID(N'dbo.PaymentTransactions', N'U') IS NOT NULL DROP TABLE dbo.PaymentTransactions;
-IF OBJECT_ID(N'dbo.Payments', N'U') IS NOT NULL DROP TABLE dbo.Payments;
+IF OBJECT_ID(N'dbo.Payments', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Payments (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Payments PRIMARY KEY,
     OrderId UNIQUEIDENTIFIER NOT NULL,
@@ -85,6 +101,10 @@ CREATE TABLE dbo.Payments (
     CreatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_Payments_CreatedAtUtc DEFAULT(SYSUTCDATETIME()),
     UpdatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_Payments_UpdatedAtUtc DEFAULT(SYSUTCDATETIME())
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.PaymentTransactions', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.PaymentTransactions (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_PaymentTransactions PRIMARY KEY,
     PaymentId UNIQUEIDENTIFIER NOT NULL,
@@ -95,13 +115,15 @@ CREATE TABLE dbo.PaymentTransactions (
     CreatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_PaymentTransactions_CreatedAtUtc DEFAULT(SYSUTCDATETIME()),
     CONSTRAINT FK_PaymentTransactions_Payments FOREIGN KEY (PaymentId) REFERENCES dbo.Payments(Id)
 );
-CREATE INDEX IX_Payments_OrderId ON dbo.Payments(OrderId);
+END;
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.Payments') AND name=N'IX_Payments_OrderId')
+    CREATE INDEX IX_Payments_OrderId ON dbo.Payments(OrderId);
 GO
 
 USE ShippingDB;
 GO
-IF OBJECT_ID(N'dbo.Shipments', N'U') IS NOT NULL DROP TABLE dbo.Shipments;
-IF OBJECT_ID(N'dbo.ShippingAddresses', N'U') IS NOT NULL DROP TABLE dbo.ShippingAddresses;
+IF OBJECT_ID(N'dbo.ShippingAddresses', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.ShippingAddresses (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_ShippingAddresses PRIMARY KEY,
     UserId UNIQUEIDENTIFIER NOT NULL,
@@ -115,6 +137,10 @@ CREATE TABLE dbo.ShippingAddresses (
     Country NVARCHAR(100) NOT NULL,
     CONSTRAINT UQ_ShippingAddresses_User UNIQUE (UserId, FullName, Phone, AddressLine1, PostalCode)
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.Shipments', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Shipments (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Shipments PRIMARY KEY,
     OrderId UNIQUEIDENTIFIER NOT NULL,
@@ -128,13 +154,15 @@ CREATE TABLE dbo.Shipments (
     UpdatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_Shipments_UpdatedAtUtc DEFAULT(SYSUTCDATETIME()),
     CONSTRAINT FK_Shipments_Addresses FOREIGN KEY (AddressId) REFERENCES dbo.ShippingAddresses(Id)
 );
-CREATE INDEX IX_Shipments_OrderId ON dbo.Shipments(OrderId);
+END;
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.Shipments') AND name=N'IX_Shipments_OrderId')
+    CREATE INDEX IX_Shipments_OrderId ON dbo.Shipments(OrderId);
 GO
 
 USE EmailDB;
 GO
-IF OBJECT_ID(N'dbo.EmailLogs', N'U') IS NOT NULL DROP TABLE dbo.EmailLogs;
-IF OBJECT_ID(N'dbo.EmailTemplates', N'U') IS NOT NULL DROP TABLE dbo.EmailTemplates;
+IF OBJECT_ID(N'dbo.EmailTemplates', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.EmailTemplates (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_EmailTemplates PRIMARY KEY,
     TemplateKey NVARCHAR(100) NOT NULL,
@@ -143,6 +171,10 @@ CREATE TABLE dbo.EmailTemplates (
     IsActive BIT NOT NULL CONSTRAINT DF_EmailTemplates_IsActive DEFAULT(1),
     CONSTRAINT UQ_EmailTemplates_Key UNIQUE (TemplateKey)
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.EmailLogs', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.EmailLogs (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_EmailLogs PRIMARY KEY,
     Recipient NVARCHAR(320) NOT NULL,
@@ -154,12 +186,15 @@ CREATE TABLE dbo.EmailLogs (
     SentAtUtc DATETIME2 NULL,
     CreatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_EmailLogs_CreatedAtUtc DEFAULT(SYSUTCDATETIME())
 );
-CREATE INDEX IX_EmailLogs_CreatedAtUtc ON dbo.EmailLogs(CreatedAtUtc DESC);
+END;
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.EmailLogs') AND name=N'IX_EmailLogs_CreatedAtUtc')
+    CREATE INDEX IX_EmailLogs_CreatedAtUtc ON dbo.EmailLogs(CreatedAtUtc DESC);
 GO
 
 USE RecommendationDB;
 GO
-IF OBJECT_ID(N'dbo.ProductRecommendations', N'U') IS NOT NULL DROP TABLE dbo.ProductRecommendations;
+IF OBJECT_ID(N'dbo.ProductRecommendations', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.ProductRecommendations (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_ProductRecommendations PRIMARY KEY,
     SourceProductId UNIQUEIDENTIFIER NULL,
@@ -169,13 +204,15 @@ CREATE TABLE dbo.ProductRecommendations (
     IsActive BIT NOT NULL CONSTRAINT DF_ProductRecommendations_IsActive DEFAULT(1),
     CONSTRAINT CK_ProductRecommendations_Score CHECK (Score BETWEEN 0 AND 100)
 );
-CREATE INDEX IX_ProductRecommendations_Source ON dbo.ProductRecommendations(SourceProductId, IsActive);
+END;
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.ProductRecommendations') AND name=N'IX_ProductRecommendations_Source')
+    CREATE INDEX IX_ProductRecommendations_Source ON dbo.ProductRecommendations(SourceProductId, IsActive);
 GO
 
 USE AdDB;
 GO
-IF OBJECT_ID(N'dbo.Campaigns', N'U') IS NOT NULL DROP TABLE dbo.Campaigns;
-IF OBJECT_ID(N'dbo.Advertisements', N'U') IS NOT NULL DROP TABLE dbo.Advertisements;
+IF OBJECT_ID(N'dbo.Advertisements', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Advertisements (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Advertisements PRIMARY KEY,
     Title NVARCHAR(200) NOT NULL,
@@ -188,6 +225,10 @@ CREATE TABLE dbo.Advertisements (
     EndAtUtc DATETIME2 NULL,
     IsActive BIT NOT NULL CONSTRAINT DF_Advertisements_IsActive DEFAULT(1)
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.Campaigns', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Campaigns (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Campaigns PRIMARY KEY,
     Name NVARCHAR(200) NOT NULL,
@@ -197,13 +238,15 @@ CREATE TABLE dbo.Campaigns (
     IsActive BIT NOT NULL CONSTRAINT DF_Campaigns_IsActive DEFAULT(1),
     CONSTRAINT CK_Campaigns_Discount CHECK (DiscountPercentage BETWEEN 0 AND 100)
 );
-CREATE INDEX IX_Advertisements_ActivePlacement ON dbo.Advertisements(IsActive, Placement, Priority);
+END;
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id=OBJECT_ID(N'dbo.Advertisements') AND name=N'IX_Advertisements_ActivePlacement')
+    CREATE INDEX IX_Advertisements_ActivePlacement ON dbo.Advertisements(IsActive, Placement, Priority);
 GO
 
 USE CurrencyDB;
 GO
-IF OBJECT_ID(N'dbo.ExchangeRates', N'U') IS NOT NULL DROP TABLE dbo.ExchangeRates;
-IF OBJECT_ID(N'dbo.Currencies', N'U') IS NOT NULL DROP TABLE dbo.Currencies;
+IF OBJECT_ID(N'dbo.Currencies', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.Currencies (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Currencies PRIMARY KEY,
     Code NVARCHAR(3) NOT NULL,
@@ -214,6 +257,10 @@ CREATE TABLE dbo.Currencies (
     IsActive BIT NOT NULL CONSTRAINT DF_Currencies_IsActive DEFAULT(1),
     CONSTRAINT UQ_Currencies_Code UNIQUE (Code)
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.ExchangeRates', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.ExchangeRates (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_ExchangeRates PRIMARY KEY,
     BaseCurrencyCode NVARCHAR(3) NOT NULL,
@@ -224,12 +271,13 @@ CREATE TABLE dbo.ExchangeRates (
     CONSTRAINT CK_ExchangeRates_Rate CHECK (Rate > 0),
     CONSTRAINT UQ_ExchangeRates_Pair UNIQUE (BaseCurrencyCode, TargetCurrencyCode)
 );
+END;
 GO
 
 USE CustomizationDB;
 GO
-IF OBJECT_ID(N'dbo.UserPreferences', N'U') IS NOT NULL DROP TABLE dbo.UserPreferences;
-IF OBJECT_ID(N'dbo.ApplicationSettings', N'U') IS NOT NULL DROP TABLE dbo.ApplicationSettings;
+IF OBJECT_ID(N'dbo.ApplicationSettings', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.ApplicationSettings (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_ApplicationSettings PRIMARY KEY,
     [Key] NVARCHAR(100) NOT NULL,
@@ -239,6 +287,10 @@ CREATE TABLE dbo.ApplicationSettings (
     IsActive BIT NOT NULL CONSTRAINT DF_ApplicationSettings_IsActive DEFAULT(1),
     CONSTRAINT UQ_ApplicationSettings_Key UNIQUE ([Key])
 );
+END;
+GO
+IF OBJECT_ID(N'dbo.UserPreferences', N'U') IS NULL
+BEGIN
 CREATE TABLE dbo.UserPreferences (
     Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_UserPreferences PRIMARY KEY,
     UserId UNIQUEIDENTIFIER NOT NULL,
@@ -248,4 +300,5 @@ CREATE TABLE dbo.UserPreferences (
     UpdatedAtUtc DATETIME2 NOT NULL CONSTRAINT DF_UserPreferences_UpdatedAtUtc DEFAULT(SYSUTCDATETIME()),
     CONSTRAINT UQ_UserPreferences_User UNIQUE (UserId)
 );
+END;
 GO
